@@ -49,11 +49,11 @@ func InitBot(fileConfig string) TelegramBot {
 	}
 
 	db, _ := secRedisNewsStorage.Key("db").Int()
-	tb.NewsStorage = redisstorage.Init[hotnews.WebNews](secRedisNewsStorage.Key("addr").String(),
+	tb.NewsStorage = redisstorage.Init[hotnews.WebNews]("REDIS_HOST",
 		secRedisNewsStorage.Key("password").String(), db)
 
 	db, _ = secRedisChannelStorage.Key("db").Int()
-	tb.TelegramChannels = redischannels.Init(secRedisChannelStorage.Key("addr").String(),
+	tb.TelegramChannels = redischannels.Init("REDIS_HOST",
 		secRedisChannelStorage.Key("password").String(), db)
 
 	b, err := tgbotapi.NewBotAPI(token)
