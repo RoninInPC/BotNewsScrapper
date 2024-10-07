@@ -1,7 +1,7 @@
 [Service]
 Requires=redis.service
 Type=oneshot
-ExecStart=docker run --rm bot_docker
+ExecStart=docker run --rm --name bot_docker bot_docker
 ExecStop=docker stop bot_docker
 
 RemainAfterExit=yes
