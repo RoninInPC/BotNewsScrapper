@@ -7,7 +7,9 @@ docker build -t bot_docker .
 
 cd service &&
 cp bot.service /etc/systemd/system/ &&
-cp redis.service /etc/systemd/system &&
+cp redis.service /etc/systemd/system/ &&
 cd /etc/systemd/system &&
-systemctl start redis.service && systemctl start bot.service
+systemctl restart redis.service && systemctl restart bot.service &&
+systemctl enable redis.service && systemctl enable bot.service
+
 
