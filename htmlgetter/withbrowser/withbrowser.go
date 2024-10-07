@@ -25,11 +25,11 @@ func Init() WithBrowser {
 
 func (h WithBrowser) GetHTML(url string) (string, error) {
 	browser, err := h.PlayWright.Firefox.Launch()
-	defer browser.Close()
-
 	if err != nil {
 		return "", err
 	}
+
+	defer browser.Close()
 	page, err := browser.NewPage()
 	defer page.Close()
 
