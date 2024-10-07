@@ -5,7 +5,7 @@ export PATH=$PATH:/usr/local/go/bin &&
 CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main . &&
 docker build -t bot_docker .
 
-find /service -type f -exec cp {} /etc/systemd/system/ \ &&
+cp -r service /etc/systemd/system/ &&
 cd /etc/systemd/system &&
 systemctl start redis.service && systemctl start bot.service
 
