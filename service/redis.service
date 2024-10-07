@@ -1,0 +1,6 @@
+[Service]
+Type=oneshot
+ExecStart=docker run --rm -p 6379:6379 --name bot_web_redis redis
+ExecStop=docker stop bot_web_redis
+
+RemainAfterExit=yes

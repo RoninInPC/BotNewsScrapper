@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteTargetsManager">
+    <targets>
+      <target name="root@213.139.209.151:22" type="ssh/sftp" uuid="59f96d71-82dd-4f35-8344-69e1e04632e3">
+        <config>
+          <option name="projectRootOnTarget" value="/root/BotNewsScrapper" />
+          <option name="serverName" value="root@213.139.209.151:22 password" />
+        </config>
+        <ContributedStateBase type="GoLanguageRuntime">
+          <config />
+        </ContributedStateBase>
+      </target>
+    </targets>
+  </component>
+</project>
