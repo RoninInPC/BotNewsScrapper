@@ -26,6 +26,7 @@ type TelegramBot struct {
 	NewsStorage      newsstorage.NewsStorage[hotnews.WebNews]
 	Commands         Commands
 	BotApi           *tgbotapi.BotAPI
+	AdminId          int64
 }
 
 func InitBot(fileConfig string) TelegramBot {
@@ -34,12 +35,13 @@ func InitBot(fileConfig string) TelegramBot {
 		panic(err1)
 	}
 	token := inidata.Section("telegram_bot").Key("token").String()
+
 	secRedisNewsStorage := inidata.Section("redis_storage")
 	secRedisChannelStorage := inidata.Section("redis_channels")
 
 	tb := TelegramBot{}
 	tb.ChannelNews = make(chan hotnews.WebNews)
-
+	tb.AdminId, _ = inidata.Section("telegram_bot").Key("admin").Int64()
 	tb.Commands = make(Commands, 0)
 
 	tb.Scrappers = []scrapper.Scrapper[hotnews.WebNews]{

@@ -4,4 +4,5 @@ type ChannelsStorage interface {
 	Add(int64)
 	GetChatsId() []int64
 	Size() int
+	Delete(int64)
 }

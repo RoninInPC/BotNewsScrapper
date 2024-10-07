@@ -36,3 +36,7 @@ func (r RedisChannels) GetChatsId() []int64 {
 func (r RedisChannels) Size() int {
 	return len(r.Client.Keys("*").Val())
 }
+
+func (r RedisChannels) Delete(id int64) {
+	r.Client.Del(strconv.FormatInt(id, 10))
+}
