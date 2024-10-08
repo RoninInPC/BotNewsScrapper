@@ -50,20 +50,20 @@ func (s ScrapperTBank) Scrape(channel chan<- hotnews.WebNews, url string, durati
 func (s ScrapperTBank) AnalysisHTML(code string, typeNews string, timeNow string) []hotnews.WebNews {
 	answer := make([]hotnews.WebNews, 0)
 	if typeNews == MainNews {
-		strs := regexp.MustCompile(`"slug":\s*"(.*?)",\s*"title":\s*"(.*?)"`).FindAllStringSubmatch(code, -1)
-		strs1 := regexp.MustCompile(`"publishedAt":\s*"(.*?)T"`).FindAllStringSubmatch(code, -1)
-		if strs != nil && strs1 != nil {
+		strs := regexp.MustCompile(`"slug":\s*"(.*?)",\s*"title":\s*"(.*?)"(.*?)"publishedAt":\s*"(.*?)T`).FindAllStringSubmatch(code, -1)
 
-			for i, s := range strs {
+		if strs != nil {
+
+			for _, s := range strs {
 				if len(s) < 3 {
 					continue
 				}
-				if strs1[i][1] != timeNow {
+				if s[4] != timeNow {
 					continue
 				}
 				answer = append(answer,
 					hotnews.WebNews{
-						From:  hotnews.TBank + "-Новости",
+						From:  hotnews.TBank + "_Новости",
 						URL:   tbankNewsURL + s[1],
 						Title: s[2],
 						Time:  timeNow})
@@ -86,7 +86,7 @@ func (s ScrapperTBank) AnalysisHTML(code string, typeNews string, timeNow string
 
 				answer = append(answer,
 					hotnews.WebNews{
-						From:  hotnews.TBank + "-Финансы",
+						From:  hotnews.TBank + "_Финансы",
 						URL:   stringURLInterfax + s1[1],
 						Title: s1[2],
 						Time:  timeNow})
@@ -96,16 +96,19 @@ func (s ScrapperTBank) AnalysisHTML(code string, typeNews string, timeNow string
 	}
 
 	if typeNews == AnalyticsNews {
-		strs := regexp.MustCompile(`"date":*"`+timeNow+`T(.*?)"title":\s*"(.*?)"(.*?)"itemUrl":\s*"(.*?)"`).FindAllStringSubmatch(code, -1)
+		strs := regexp.MustCompile(`"date":\s*"(.*?)T(.*?)"title":\s*"(.*?)"(.*?)"itemUrl":\s*"(.*?)"`).FindAllStringSubmatch(code, -1)
 		for _, s := range strs {
 			if len(s) < 5 {
 				continue
 			}
+			if s[1] != timeNow {
+				continue
+			}
 			answer = append(answer,
 				hotnews.WebNews{
-					From:  hotnews.TBank + "-Аналитика",
-					URL:   tbankURL + s[4],
-					Title: s[2],
+					From:  hotnews.TBank + "_Аналитика",
+					URL:   tbankURL + s[5],
+					Title: s[3],
 					Time:  timeNow})
 		}
 	}

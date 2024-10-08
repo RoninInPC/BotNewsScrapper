@@ -7,7 +7,7 @@ type News interface {
 const (
 	BKS   = "BKS"
 	Finam = "Finam"
-	TBank = "T-Bank"
+	TBank = "T_Bank"
 )
 
 type WebNews struct {
