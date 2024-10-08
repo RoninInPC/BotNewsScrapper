@@ -3,6 +3,7 @@ package scrapperfinam
 import (
 	"BotNewsScrapper/hotnews"
 	"BotNewsScrapper/htmlgetter"
+	"log"
 	"net/url"
 	"regexp"
 	"time"
@@ -26,6 +27,9 @@ func (s ScrapperFinam) Scrape(
 	go func() {
 		for {
 			html, err := s.HTMLGetter.GetHTML(url)
+			if err != nil {
+				log.Println(err)
+			}
 			if err != nil {
 				continue
 			}
