@@ -113,10 +113,7 @@ func (t *TelegramBot) Work(duration time.Duration) {
 
 					msg.ParseMode = tgbotapi.ModeMarkdown
 
-					t.BotApi.Send(tgbotapi.NewMessage(channelId,
-						"Свежая новость "+"\n\n"+
-							news.Title+"\n\n"+
-							"@"+t.BotApi.Self.UserName))
+					t.BotApi.Send(msg)
 				}
 			}
 			time.Sleep(duration)
