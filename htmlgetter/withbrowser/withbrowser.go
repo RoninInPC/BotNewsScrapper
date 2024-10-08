@@ -31,11 +31,12 @@ func (h WithBrowser) GetHTML(url string) (string, error) {
 
 	defer browser.Close()
 	page, err := browser.NewPage()
-	defer page.Close()
 
 	if err != nil {
 		return "", err
 	}
+	defer page.Close()
+
 	response, err := page.Goto(url)
 	if err != nil {
 		return "", err
