@@ -1,5 +1,11 @@
 FROM ubuntu
 
+RUN apt-get -y update
+
+RUN apt-get -y install npm
+
+RUN npx playwright install-deps
+
 RUN apt-get install libatk1.0-0t64  \
   libatk-bridge2.0-0t64  \
     libcups2t64  \
