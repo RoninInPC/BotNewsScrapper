@@ -15,7 +15,6 @@ import (
 	"github.com/and3rson/telemux/v2"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"gopkg.in/ini.v1"
-	"log"
 	"time"
 )
 
@@ -104,13 +103,12 @@ func (t *TelegramBot) Work(duration time.Duration) {
 					continue
 				}
 
-				log.Println("worked:", news.GetNews())
+				//log.Println("worked:", news.GetNews())
 
 				for _, channelId := range t.TelegramChannels.GetChatsId() {
 					t.BotApi.Send(tgbotapi.NewMessage(channelId,
-						"Свежая новость "+
-							time.Now().Format("02.01.2006 15.04.05")+"\n\n"+
-							news.GetNews()+
+						"Свежая новость "+"\n\n"+
+							news.Title+"\n\n"+
 							"@"+t.BotApi.Self.UserName))
 				}
 			}
