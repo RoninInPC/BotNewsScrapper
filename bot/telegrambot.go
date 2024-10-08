@@ -106,6 +106,13 @@ func (t *TelegramBot) Work(duration time.Duration) {
 				//log.Println("worked:", news.GetNews())
 
 				for _, channelId := range t.TelegramChannels.GetChatsId() {
+					msg := tgbotapi.NewMessage(channelId,
+						"#"+news.From+"\n\n*"+
+							news.Title+"*\n\n"+
+							"@"+t.BotApi.Self.UserName)
+
+					msg.ParseMode = tgbotapi.ModeMarkdown
+
 					t.BotApi.Send(tgbotapi.NewMessage(channelId,
 						"Свежая новость "+"\n\n"+
 							news.Title+"\n\n"+

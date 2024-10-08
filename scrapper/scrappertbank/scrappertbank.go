@@ -63,7 +63,7 @@ func (s ScrapperTBank) AnalysisHTML(code string, typeNews string, timeNow string
 				}
 				answer = append(answer,
 					hotnews.WebNews{
-						From:  hotnews.TBank,
+						From:  hotnews.TBank + "-Новости",
 						URL:   tbankNewsURL + s[1],
 						Title: s[2],
 						Time:  timeNow})
@@ -86,7 +86,7 @@ func (s ScrapperTBank) AnalysisHTML(code string, typeNews string, timeNow string
 
 				answer = append(answer,
 					hotnews.WebNews{
-						From:  hotnews.TBank,
+						From:  hotnews.TBank + "-Финансы",
 						URL:   stringURLInterfax + s1[1],
 						Title: s1[2],
 						Time:  timeNow})
@@ -103,7 +103,7 @@ func (s ScrapperTBank) AnalysisHTML(code string, typeNews string, timeNow string
 			}
 			answer = append(answer,
 				hotnews.WebNews{
-					From:  hotnews.TBank,
+					From:  hotnews.TBank + "-Аналитика",
 					URL:   tbankURL + s[4],
 					Title: s[2],
 					Time:  timeNow})
