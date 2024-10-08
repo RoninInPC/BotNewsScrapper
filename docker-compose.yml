@@ -1,7 +1,10 @@
 version: '3.8'
 services:
   client-backend:
-    image: bot_docker
+    image: client:0.0.1
+    build:
+      context: .
+      dockerfile: Dockerfile
     depends_on:
       - service-db
     network_mode: "host"
