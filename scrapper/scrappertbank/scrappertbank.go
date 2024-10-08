@@ -4,6 +4,7 @@ import (
 	"BotNewsScrapper/hotnews"
 	"BotNewsScrapper/htmlgetter"
 	"regexp"
+	"strings"
 	"time"
 )
 
@@ -63,9 +64,9 @@ func (s ScrapperTBank) AnalysisHTML(code string, typeNews string, timeNow string
 				}
 				answer = append(answer,
 					hotnews.WebNews{
-						From:  hotnews.TBank + "_Новости",
+						From:  FixStringMarkdown(hotnews.TBank + "_Новости"),
 						URL:   tbankNewsURL + s[1],
-						Title: s[2],
+						Title: FixTitle(s[2]),
 						Time:  timeNow})
 			}
 
@@ -86,9 +87,9 @@ func (s ScrapperTBank) AnalysisHTML(code string, typeNews string, timeNow string
 
 				answer = append(answer,
 					hotnews.WebNews{
-						From:  hotnews.TBank + "_Финансы",
+						From:  FixStringMarkdown(hotnews.TBank + "_Финансы"),
 						URL:   stringURLInterfax + s1[1],
-						Title: s1[2],
+						Title: FixTitle(s1[2]),
 						Time:  timeNow})
 			}
 		}
@@ -106,11 +107,23 @@ func (s ScrapperTBank) AnalysisHTML(code string, typeNews string, timeNow string
 			}
 			answer = append(answer,
 				hotnews.WebNews{
-					From:  hotnews.TBank + "_Аналитика",
+					From:  FixStringMarkdown(hotnews.TBank + "_Аналитика"),
 					URL:   tbankURL + s[5],
-					Title: s[3],
+					Title: FixTitle(s[3]),
 					Time:  timeNow})
 		}
 	}
 	return answer
+}
+
+func FixStringMarkdown(str string) string {
+	str = strings.Replace(str, "_", "\\_", strings.Count(str, "_"))
+	str = strings.Replace(str, "`", "\\`", strings.Count(str, "`"))
+	str = strings.Replace(str, "[", "\\[", strings.Count(str, "["))
+	return strings.Replace(str, "*", "\\*", strings.Count(str, "*"))
+}
+
+func FixTitle(str string) string {
+	str = strings.Replace(str, "\\\"", "\"", strings.Count(str, "\\\""))
+	return str
 }

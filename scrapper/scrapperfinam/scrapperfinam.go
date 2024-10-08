@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/url"
 	"regexp"
+	"strings"
 	"time"
 )
 
@@ -65,9 +66,14 @@ func (s ScrapperFinam) AnalysisHTML(html string, u string, timeNow string) []hot
 
 		answer = append(answer, hotnews.WebNews{
 			From:  hotnews.Finam,
-			Title: str1[1],
+			Title: FixTitle(str1[1]),
 			URL:   parsed.Scheme + "://" + parsed.Host + str[1],
 			Time:  timeNew})
 	}
 	return answer
+}
+
+func FixTitle(str string) string {
+	str = strings.Replace(str, "&quot;", "\"", strings.Count(str, "&quot;"))
+	return str
 }
