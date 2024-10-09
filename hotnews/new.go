@@ -6,7 +6,7 @@ type News interface {
 
 const (
 	BKS   = "BKS"
-	Finam = "Finam"
+	Finam = "Финам"
 	TBank = "T_Bank"
 )
 
