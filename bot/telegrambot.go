@@ -6,12 +6,10 @@ import (
 	"BotNewsScrapper/hotnews"
 	"BotNewsScrapper/htmlgetter/simple"
 	"BotNewsScrapper/htmlgetter/withbrowser"
-	"BotNewsScrapper/makeimagefromweb/rvi"
 	"BotNewsScrapper/makeimagefromweb/warmmap"
 	"BotNewsScrapper/newsstorage"
 	"BotNewsScrapper/newsstorage/redisstorage"
 	"BotNewsScrapper/scrapper"
-	"BotNewsScrapper/scrapper/scrapperbks"
 	"BotNewsScrapper/scrapper/scrapperfinam"
 	"BotNewsScrapper/scrapper/scrappertbank"
 	"BotNewsScrapper/sender"
@@ -51,7 +49,7 @@ func InitBot(fileConfig string) TelegramBot {
 	tb.Commands = make(Commands, 0)
 
 	tb.Scrappers = []scrapper.Scrapper[hotnews.WebNews]{
-		scrapperbks.ScrapperBKS{HTMLGetter: withbrowser.Init()},
+		//scrapperbks.ScrapperBKS{HTMLGetter: withbrowser.Init()},
 		scrapperfinam.ScrapperFinam{HTMLGetter: withbrowser.Init()},
 		scrappertbank.ScrapperTBank{HTMLGetter: simple.Simple{}},
 	}
@@ -77,17 +75,14 @@ func InitBot(fileConfig string) TelegramBot {
 			Telegram:         &tb,
 			Cron:             cronMoscow,
 			MakeImageFromWeb: warmmap.Init(),
-			CronSetup:        "0 2 10 * * 1-5"},
+			CronSetup:        "0 2 10 * * 1-5",
+			Caption:          "Тепловая карта открытия биржи."},
 		TelegramSenderImage{
 			Telegram:         &tb,
 			Cron:             cronMoscow,
 			MakeImageFromWeb: warmmap.Init(),
-			CronSetup:        "0 43 18 * * 1-5"},
-		TelegramSenderImage{
-			Telegram:         &tb,
-			Cron:             cronMoscow,
-			MakeImageFromWeb: rvi.Init(),
-			CronSetup:        "0 0 18 * * 3"},
+			CronSetup:        "0 43 18 * * 1-5",
+			Caption:          "Тепловая карты закрытия биржи."},
 	}
 	return tb
 }

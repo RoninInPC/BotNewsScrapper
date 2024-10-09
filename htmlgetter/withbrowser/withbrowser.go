@@ -19,10 +19,13 @@ func Init() WithBrowser {
 }
 
 func (h WithBrowser) GetHTML(url string) (string, error) {
-
-	pl, err := playwright.Run()
-	if err != nil {
-		return "", err
+	pl := &playwright.Playwright{}
+	for {
+		pl1, err := playwright.Run()
+		if err == nil && pl1 != nil {
+			pl = pl1
+			break
+		}
 	}
 
 	browser, err := pl.Firefox.Launch()

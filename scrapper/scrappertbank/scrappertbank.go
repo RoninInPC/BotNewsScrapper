@@ -36,13 +36,13 @@ func (s ScrapperTBank) Scrape(channel chan<- hotnews.WebNews, url string, durati
 		for {
 			timeNow := time.Now().Format("2006-01-02")
 
-			mainNews, _ := s.HTMLGetter.GetHTML(stringResponseFormatMainNews)
+			//mainNews, _ := s.HTMLGetter.GetHTML(stringResponseFormatMainNews)
 			interfaxNews, _ := s.HTMLGetter.GetHTML(stringResponseNewsInterfax)
-			analyticsNews, _ := s.HTMLGetter.GetHTML(stringResponseNewsAnalitics)
+			//analyticsNews, _ := s.HTMLGetter.GetHTML(stringResponseNewsAnalitics)
 
-			appendInChannel(channel, s.AnalysisHTML(mainNews, MainNews, timeNow))
+			//appendInChannel(channel, s.AnalysisHTML(mainNews, MainNews, timeNow))
 			appendInChannel(channel, s.AnalysisHTML(interfaxNews, InterfaxNews, timeNow))
-			appendInChannel(channel, s.AnalysisHTML(analyticsNews, AnalyticsNews, timeNow))
+			//appendInChannel(channel, s.AnalysisHTML(analyticsNews, AnalyticsNews, timeNow))
 			time.Sleep(duration)
 		}
 	}()
@@ -87,7 +87,7 @@ func (s ScrapperTBank) AnalysisHTML(code string, typeNews string, timeNow string
 
 				answer = append(answer,
 					hotnews.WebNews{
-						From:  FixStringMarkdown(hotnews.TBank + "_Финансы"),
+						From:  FixStringMarkdown("Интерфакс"),
 						URL:   stringURLInterfax + s1[1],
 						Title: FixTitle(s1[2]),
 						Time:  timeNow})
