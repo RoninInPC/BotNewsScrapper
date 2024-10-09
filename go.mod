@@ -7,6 +7,7 @@ require (
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
 	github.com/playwright-community/playwright-go v0.4702.0
+	github.com/robfig/cron v1.2.0
 	gopkg.in/ini.v1 v1.67.0
 )
 

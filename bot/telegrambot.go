@@ -6,14 +6,18 @@ import (
 	"BotNewsScrapper/hotnews"
 	"BotNewsScrapper/htmlgetter/simple"
 	"BotNewsScrapper/htmlgetter/withbrowser"
+	"BotNewsScrapper/makeimagefromweb/rvi"
+	"BotNewsScrapper/makeimagefromweb/warmmap"
 	"BotNewsScrapper/newsstorage"
 	"BotNewsScrapper/newsstorage/redisstorage"
 	"BotNewsScrapper/scrapper"
 	"BotNewsScrapper/scrapper/scrapperbks"
 	"BotNewsScrapper/scrapper/scrapperfinam"
 	"BotNewsScrapper/scrapper/scrappertbank"
+	"BotNewsScrapper/sender"
 	"github.com/and3rson/telemux/v2"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/robfig/cron"
 	"gopkg.in/ini.v1"
 	"time"
 )
@@ -23,9 +27,11 @@ type TelegramBot struct {
 	TelegramChannels channelsstorage.ChannelsStorage
 	Scrappers        []scrapper.Scrapper[hotnews.WebNews]
 	NewsStorage      newsstorage.NewsStorage[hotnews.WebNews]
-	Commands         Commands
-	BotApi           *tgbotapi.BotAPI
-	AdminId          int64
+	Senders          []sender.Sender
+
+	Commands Commands
+	BotApi   *tgbotapi.BotAPI
+	AdminId  int64
 }
 
 func InitBot(fileConfig string) TelegramBot {
@@ -39,6 +45,7 @@ func InitBot(fileConfig string) TelegramBot {
 	secRedisChannelStorage := inidata.Section("redis_channels")
 
 	tb := TelegramBot{}
+
 	tb.ChannelNews = make(chan hotnews.WebNews)
 	tb.AdminId, _ = inidata.Section("telegram_bot").Key("admin").Int64()
 	tb.Commands = make(Commands, 0)
@@ -48,7 +55,6 @@ func InitBot(fileConfig string) TelegramBot {
 		scrapperfinam.ScrapperFinam{HTMLGetter: withbrowser.Init()},
 		scrappertbank.ScrapperTBank{HTMLGetter: simple.Simple{}},
 	}
-
 	db, _ := secRedisNewsStorage.Key("db").Int()
 	tb.NewsStorage = redisstorage.Init[hotnews.WebNews](secRedisNewsStorage.Key("addr").String(),
 		secRedisNewsStorage.Key("password").String(), db)
@@ -63,6 +69,26 @@ func InitBot(fileConfig string) TelegramBot {
 	}
 	tb.BotApi = b
 
+	loc, _ := time.LoadLocation("Europe/Moscow")
+	cronMoscow := cron.NewWithLocation(loc)
+
+	tb.Senders = []sender.Sender{
+		TelegramSenderImage{
+			Telegram:         &tb,
+			Cron:             cronMoscow,
+			MakeImageFromWeb: warmmap.Init(),
+			CronSetup:        "0 2 10 * * 1-5"},
+		TelegramSenderImage{
+			Telegram:         &tb,
+			Cron:             cronMoscow,
+			MakeImageFromWeb: warmmap.Init(),
+			CronSetup:        "0 43 18 * * 1-5"},
+		TelegramSenderImage{
+			Telegram:         &tb,
+			Cron:             cronMoscow,
+			MakeImageFromWeb: rvi.Init(),
+			CronSetup:        "0 0 18 * * 3"},
+	}
 	return tb
 }
 
@@ -92,6 +118,10 @@ func (t *TelegramBot) Work(duration time.Duration) {
 	for _, s := range t.Scrappers {
 		s.Scrape(t.ChannelNews, "", duration)
 	}
+	for _, s := range t.Senders {
+		s.Work()
+	}
+
 	go func() {
 		for {
 			t.NewsStorage.Free()
@@ -106,9 +136,13 @@ func (t *TelegramBot) Work(duration time.Duration) {
 				//log.Println("worked:", news.GetNews())
 
 				for _, channelId := range t.TelegramChannels.GetChatsId() {
+					subTitle := "\n\n"
+					if len(news.SubTitle) > 0 {
+						subTitle = "\n" + news.SubTitle + "\n\n"
+					}
 					msg := tgbotapi.NewMessage(channelId,
 						"#"+news.From+"\n\n*"+
-							news.Title+"*\n\n"+
+							news.Title+"*"+subTitle+
 							"@"+t.BotApi.Self.UserName)
 
 					msg.ParseMode = tgbotapi.ModeMarkdown

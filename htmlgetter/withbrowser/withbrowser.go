@@ -3,7 +3,6 @@ package withbrowser
 import "github.com/playwright-community/playwright-go"
 
 type WithBrowser struct {
-	PlayWright *playwright.Playwright
 }
 
 var (
@@ -16,15 +15,17 @@ func Init() WithBrowser {
 		isInstalled = true
 	}
 	h := WithBrowser{}
-	pl, err := playwright.Run()
-	if err == nil {
-		h.PlayWright = pl
-	}
 	return h
 }
 
 func (h WithBrowser) GetHTML(url string) (string, error) {
-	browser, err := h.PlayWright.Firefox.Launch()
+
+	pl, err := playwright.Run()
+	if err != nil {
+		return "", err
+	}
+
+	browser, err := pl.Firefox.Launch()
 	if err != nil {
 		return "", err
 	}

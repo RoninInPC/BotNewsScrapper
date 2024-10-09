@@ -11,10 +11,11 @@ const (
 )
 
 type WebNews struct {
-	From  string
-	URL   string
-	Title string
-	Time  string
+	From     string
+	URL      string
+	Title    string
+	SubTitle string
+	Time     string
 }
 
 func (n WebNews) GetNews() string {
