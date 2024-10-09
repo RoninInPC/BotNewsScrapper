@@ -24,7 +24,6 @@ const (
 )
 
 type RVI struct {
-	PlayWright *playwright.Playwright
 }
 
 func Init() RVI {
@@ -33,10 +32,6 @@ func Init() RVI {
 		_ = playwright.Install()
 		isInstalled = true
 	}
-	pl, err := playwright.Run()
-	if err == nil {
-		rvi.PlayWright = pl
-	}
 	return rvi
 }
 
@@ -44,7 +39,13 @@ func (r RVI) Get(url string) (string, image.Image, error) {
 	if url == "" {
 		url = BaseURL
 	}
-	browser, err := r.PlayWright.Firefox.Launch()
+	pl, err := playwright.Run()
+
+	if err != nil {
+		return "", nil, err
+	}
+
+	browser, err := pl.Firefox.Launch()
 	if err != nil {
 		return "", nil, err
 	}
@@ -77,5 +78,7 @@ func (r RVI) Get(url string) (string, image.Image, error) {
 
 	out, _ := os.Create("./" + FileName)
 	err = png.Encode(out, croppedImg)
+
+	pl.Stop()
 	return FileName, croppedImg, err
 }

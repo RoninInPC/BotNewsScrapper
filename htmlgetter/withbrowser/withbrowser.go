@@ -44,5 +44,7 @@ func (h WithBrowser) GetHTML(url string) (string, error) {
 	}
 
 	bytes, err := response.Body()
+
+	pl.Stop()
 	return string(bytes), err
 }

@@ -80,5 +80,7 @@ func (w WarmMap) Get(url string) (string, image.Image, error) {
 
 	out, _ := os.Create("" + FileName)
 	err = png.Encode(out, croppedImg)
+
+	pl.Stop()
 	return FileName, croppedImg, err
 }
