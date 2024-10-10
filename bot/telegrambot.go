@@ -4,14 +4,12 @@ import (
 	"BotNewsScrapper/channelsstorage"
 	"BotNewsScrapper/channelsstorage/redischannels"
 	"BotNewsScrapper/hotnews"
-	"BotNewsScrapper/htmlgetter/simple"
 	"BotNewsScrapper/htmlgetter/withbrowser"
 	"BotNewsScrapper/makeimagefromweb/warmmap"
 	"BotNewsScrapper/newsstorage"
 	"BotNewsScrapper/newsstorage/redisstorage"
 	"BotNewsScrapper/scrapper"
 	"BotNewsScrapper/scrapper/scrapperfinam"
-	"BotNewsScrapper/scrapper/scrappertbank"
 	"BotNewsScrapper/sender"
 	"github.com/and3rson/telemux/v2"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -51,7 +49,7 @@ func InitBot(fileConfig string) TelegramBot {
 	tb.Scrappers = []scrapper.Scrapper[hotnews.WebNews]{
 		//scrapperbks.ScrapperBKS{HTMLGetter: withbrowser.Init()},
 		scrapperfinam.ScrapperFinam{HTMLGetter: withbrowser.Init()},
-		scrappertbank.ScrapperTBank{HTMLGetter: simple.Simple{}},
+		//scrappertbank.ScrapperTBank{HTMLGetter: simple.Simple{}},
 	}
 	db, _ := secRedisNewsStorage.Key("db").Int()
 	tb.NewsStorage = redisstorage.Init[hotnews.WebNews](secRedisNewsStorage.Key("addr").String(),
