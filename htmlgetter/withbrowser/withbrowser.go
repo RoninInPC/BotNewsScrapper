@@ -28,7 +28,7 @@ func (h WithBrowser) GetHTML(url string) (string, error) {
 		}
 	}
 
-	browser, err := pl.Chromium.Launch()
+	browser, err := pl.Firefox.Launch()
 	if err != nil {
 		return "", err
 	}
