@@ -44,6 +44,9 @@ func (s ScrapperFinam) Scrape(
 
 func (s ScrapperFinam) AnalysisHTML(html string, u string, timeNow string) []hotnews.WebNews {
 	answer := make([]hotnews.WebNews, 0)
+	html = strings.Replace(html, "\t", "", strings.Count(html, "\t"))
+	html = strings.Replace(html, "\n", "", strings.Count(html, "\n"))
+	html = strings.Replace(html, "\r", "", strings.Count(html, "\r"))
 	strs := regexp.MustCompile(`<a href="([^"]*)" data-chp-url="([^"]*)" class="cl-blue font-l bold"([^<]*)>*</a>`).FindAllStringSubmatch(html, -1)
 	strs1 := regexp.MustCompile(`<p class="font-s cl-black">(.*?)</p>`).FindAllStringSubmatch(html, -1)
 	if strs1 == nil {
