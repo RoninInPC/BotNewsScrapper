@@ -15,6 +15,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/robfig/cron"
 	"gopkg.in/ini.v1"
+	"log"
 	"time"
 )
 
@@ -123,10 +124,9 @@ func (t *TelegramBot) Work(duration time.Duration) {
 					continue
 				}
 				if !t.NewsStorage.Add(news) {
+					log.Println("added:", news.Title, " ")
 					continue
 				}
-
-				//log.Println("worked:", news.GetNews())
 
 				for _, channelId := range t.TelegramChannels.GetChatsId() {
 					subTitle := "\n\n"
@@ -134,8 +134,8 @@ func (t *TelegramBot) Work(duration time.Duration) {
 						subTitle = "\n" + news.SubTitle + "\n\n"
 					}
 					msg := tgbotapi.NewMessage(channelId,
-						"#"+news.From+"\n\n*"+
-							news.Title+"*"+subTitle+
+						//"#"+news.From+"\n\n*"+
+						"\n*"+news.Title+"*"+subTitle+
 							"@"+t.BotApi.Self.UserName)
 
 					msg.ParseMode = tgbotapi.ModeMarkdown
