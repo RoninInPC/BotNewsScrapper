@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    user: root
     depends_on:
       - service-db
     network_mode: "host"
