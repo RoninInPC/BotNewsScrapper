@@ -124,9 +124,9 @@ func (t *TelegramBot) Work(duration time.Duration) {
 					continue
 				}
 				if !t.NewsStorage.Add(news) {
-					log.Println("added:", news.Title, " ")
 					continue
 				}
+				log.Println("added:", news.Title, " ")
 
 				for _, channelId := range t.TelegramChannels.GetChatsId() {
 					subTitle := "\n\n"
