@@ -28,10 +28,6 @@ type WarmMap struct {
 
 func Init() WarmMap {
 	rvi := WarmMap{}
-	if !isInstalled {
-		_ = playwright.Install()
-		isInstalled = true
-	}
 
 	return rvi
 }
@@ -40,11 +36,13 @@ func (w WarmMap) Get(url string) (string, image.Image, error) {
 	if url == "" {
 		url = BaseURL
 	}
-
-	pl, err := playwright.Run()
-
-	if err != nil {
-		return "", nil, err
+	pl := &playwright.Playwright{}
+	for {
+		pl1, err := playwright.Run()
+		if err == nil {
+			pl = pl1
+			break
+		}
 	}
 
 	browser, err := pl.Firefox.Launch()

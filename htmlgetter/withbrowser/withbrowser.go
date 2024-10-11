@@ -15,9 +15,15 @@ var (
 
 func Init() WithBrowser {
 	if isInstalled == nil {
-		_ = playwright.Install()
 		isInstalled = &atomic.Bool{}
+		isInstalled.Store(false)
+		_ = playwright.Install()
 		isInstalled.Store(true)
+	} else {
+		if !isInstalled.Load() {
+			_ = playwright.Install()
+			isInstalled.Store(true)
+		}
 	}
 	h := WithBrowser{}
 	return h
@@ -26,14 +32,16 @@ func Init() WithBrowser {
 func (h WithBrowser) ReInstall() {
 	if isInstalled.Load() == true {
 		isInstalled.Store(false)
-		exec.Command("npx playwright uninstall").Run()
-		exec.Command("npx playwright install --with-deps").Run()
+		exec.Command("npx", "playwright", "uninstall").Run()
+		exec.Command("npx", "playwright", "install", "--with-deps").Run()
 		isInstalled.Store(true)
 	}
 }
 
 func (h WithBrowser) GetHTML(url string) (string, error) {
-
+	if !isInstalled.Load() {
+		return "", nil
+	}
 	pl, err := playwright.Run()
 	if err != nil {
 		h.ReInstall()
