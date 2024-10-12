@@ -32,8 +32,8 @@ func Init() WithBrowser {
 func (h WithBrowser) ReInstall() {
 	if isInstalled.Load() == true {
 		isInstalled.Store(false)
-		exec.Command("npx", "playwright", "uninstall").Run()
-		exec.Command("npx", "playwright", "install", "--with-deps").Run()
+		exec.Command("npx", "playwright", "uninstall").Output()
+		exec.Command("npx", "playwright", "install", "--with-deps").Output()
 		isInstalled.Store(true)
 	}
 }

@@ -7,6 +7,7 @@ import (
 	"image/draw"
 	"image/png"
 	"os"
+	"os/exec"
 	"time"
 )
 
@@ -43,6 +44,8 @@ func (w WarmMap) Get(url string) (string, image.Image, error) {
 			pl = pl1
 			break
 		}
+		exec.Command("npx", "playwright", "uninstall").Output()
+		exec.Command("npx", "playwright", "install", "--with-deps").Output()
 	}
 
 	browser, err := pl.Firefox.Launch()
