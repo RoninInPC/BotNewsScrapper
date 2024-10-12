@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/robfig/cron"
+	"log"
 	"os"
 	"time"
 )
@@ -35,6 +36,8 @@ func (t TelegramSenderImage) Work() {
 					t.Telegram.BotApi.Send(photo)
 				}
 			}
+		} else {
+			log.Println("println MakeImageFromMap warmap", err.Error())
 		}
 	})
 	go t.Cron.Start()

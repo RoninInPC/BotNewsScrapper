@@ -29,7 +29,7 @@ func (s ScrapperFinam) Scrape(
 		for {
 			html, err := s.HTMLGetter.GetHTML(url)
 			if err != nil {
-				log.Println(err)
+				log.Println("FinamError", err.Error())
 			}
 			if err != nil {
 				continue
