@@ -65,6 +65,6 @@ func main() {
 			tbbot}})*/
 
 	tbbot.InitBotMenu()
-	go tbbot.Work(time.Second * 30)
+	go tbbot.Work(time.Second * 80)
 	tbbot.Dispatch()
 }

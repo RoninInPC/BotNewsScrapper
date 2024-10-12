@@ -7,7 +7,6 @@ import (
 	"image/draw"
 	"image/png"
 	"os"
-	"os/exec"
 	"time"
 )
 
@@ -37,15 +36,9 @@ func (w WarmMap) Get(url string) (string, image.Image, error) {
 	if url == "" {
 		url = BaseURL
 	}
-	pl := &playwright.Playwright{}
-	for {
-		pl1, err := playwright.Run()
-		if err == nil {
-			pl = pl1
-			break
-		}
-		exec.Command("npx", "playwright", "uninstall").Output()
-		exec.Command("npx", "playwright", "install", "--with-deps").Output()
+	pl, err := playwright.Run()
+	if err != nil {
+		return "", nil, err
 	}
 
 	browser, err := pl.Firefox.Launch()
