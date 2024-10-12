@@ -60,6 +60,7 @@ func (w WarmMap) Get(url string) (string, image.Image, error) {
 		return "", nil, err
 	}
 	defer page.Close()
+	page.SetDefaultTimeout(800000)
 	_, err = page.Goto(url)
 
 	if err != nil {

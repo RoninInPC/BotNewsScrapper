@@ -30,7 +30,7 @@ func (r RedisStorage[News]) Add(news News) bool {
 func (r RedisStorage[News]) Free() {
 	for _, key := range r.GetAllKeys() {
 		t, _ := time.Parse(time.Now().String(), r.Client.Get(key).String())
-		if t.Add(time.Hour * 24).Before(time.Now()) {
+		if t.Add(time.Hour * 72).Before(time.Now()) {
 			r.Client.Del(key)
 		}
 	}

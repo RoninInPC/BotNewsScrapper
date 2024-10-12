@@ -19,5 +19,5 @@ type WebNews struct {
 }
 
 func (n WebNews) GetNews() string {
-	return n.Title + "\n\n" + n.URL + "\n\n"
+	return n.Title
 }

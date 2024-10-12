@@ -61,6 +61,7 @@ func (h WithBrowser) GetHTML(url string) (string, error) {
 	}
 	defer page.Close()
 
+	page.SetDefaultTimeout(800000)
 	response, err := page.Goto(url)
 	if err != nil {
 		return "", err
