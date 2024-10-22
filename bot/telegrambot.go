@@ -10,6 +10,7 @@ import (
 	"BotNewsScrapper/newsstorage/redisstorage"
 	"BotNewsScrapper/scrapper"
 	"BotNewsScrapper/scrapper/scrapperfinam"
+	"BotNewsScrapper/scrapper/scrapperterminal"
 	"BotNewsScrapper/sender"
 	"github.com/and3rson/telemux/v2"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -51,6 +52,7 @@ func InitBot(fileConfig string) TelegramBot {
 		//scrapperbks.ScrapperBKS{HTMLGetter: withbrowser.Init()},
 		scrapperfinam.ScrapperFinam{HTMLGetter: withbrowser.Init()},
 		//scrappertbank.ScrapperTBank{HTMLGetter: simple.Simple{}},
+		scrapperterminal.ScrapperTerminal{HTMLGetter: withbrowser.Init()},
 	}
 	db, _ := secRedisNewsStorage.Key("db").Int()
 	tb.NewsStorage = redisstorage.Init[hotnews.WebNews](secRedisNewsStorage.Key("addr").String(),
@@ -75,12 +77,14 @@ func InitBot(fileConfig string) TelegramBot {
 			Cron:             cronMoscow,
 			MakeImageFromWeb: warmmap.Init(),
 			CronSetup:        "0 02 10 * * 1-5",
+			Emoji:            "🗺️",
 			Caption:          "Тепловая карта открытия биржи."},
 		TelegramSenderImage{
 			Telegram:         &tb,
 			Cron:             cronMoscow,
 			MakeImageFromWeb: warmmap.Init(),
 			CronSetup:        "0 43 18 * * 1-5",
+			Emoji:            "🗺️",
 			Caption:          "Тепловая карты закрытия биржи."},
 	}
 	return tb

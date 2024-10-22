@@ -2,6 +2,7 @@ package withbrowser
 
 import (
 	"github.com/playwright-community/playwright-go"
+	"log"
 	"os/exec"
 	"sync/atomic"
 )
@@ -32,8 +33,10 @@ func Init() WithBrowser {
 func (h WithBrowser) ReInstall() {
 	if isInstalled.Load() == true {
 		isInstalled.Store(false)
-		exec.Command("npx", "playwright", "uninstall").Output()
-		exec.Command("npx", "playwright", "install", "--with-deps").Output()
+		ans, _ := exec.Command("npx", "playwright", "uninstall").Output()
+		log.Println(ans)
+		ans, _ = exec.Command("npx", "playwright", "install", "--with-deps").Output()
+		log.Println(ans)
 		isInstalled.Store(true)
 	}
 }
@@ -50,6 +53,7 @@ func (h WithBrowser) GetHTML(url string) (string, error) {
 
 	browser, err := pl.Firefox.Launch()
 	if err != nil {
+		h.ReInstall()
 		return "", err
 	}
 
@@ -57,6 +61,7 @@ func (h WithBrowser) GetHTML(url string) (string, error) {
 	page, err := browser.NewPage()
 
 	if err != nil {
+		h.ReInstall()
 		return "", err
 	}
 	defer page.Close()
@@ -64,6 +69,7 @@ func (h WithBrowser) GetHTML(url string) (string, error) {
 	page.SetDefaultTimeout(800000)
 	response, err := page.Goto(url)
 	if err != nil {
+		h.ReInstall()
 		return "", err
 	}
 
@@ -71,4 +77,38 @@ func (h WithBrowser) GetHTML(url string) (string, error) {
 
 	pl.Stop()
 	return string(bytes), err
+}
+
+func (h WithBrowser) GetScreenshot(url string) ([]byte, error) {
+	pl, err := playwright.Run()
+	if err != nil {
+		h.ReInstall()
+		return nil, err
+	}
+
+	browser, err := pl.Firefox.Launch()
+	if err != nil {
+		h.ReInstall()
+		return nil, err
+	}
+	defer browser.Close()
+
+	page, err := browser.NewPage()
+
+	if err != nil {
+		h.ReInstall()
+		return nil, err
+	}
+	defer page.Close()
+	page.SetDefaultTimeout(800000)
+	_, err = page.Goto(url)
+
+	if err != nil {
+		h.ReInstall()
+		return nil, err
+	}
+
+	screen, err := page.Screenshot()
+	pl.Stop()
+	return screen, err
 }

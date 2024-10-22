@@ -1,13 +1,13 @@
 package warmmap
 
 import (
+	"BotNewsScrapper/htmlgetter"
+	"BotNewsScrapper/htmlgetter/withbrowser"
 	"bytes"
-	"github.com/playwright-community/playwright-go"
 	"image"
 	"image/draw"
 	"image/png"
 	"os"
-	"time"
 )
 
 var (
@@ -24,10 +24,11 @@ const (
 )
 
 type WarmMap struct {
+	HTMLGetter htmlgetter.HTMLGetter
 }
 
 func Init() WarmMap {
-	rvi := WarmMap{}
+	rvi := WarmMap{HTMLGetter: withbrowser.Init()}
 
 	return rvi
 }
@@ -36,36 +37,11 @@ func (w WarmMap) Get(url string) (string, image.Image, error) {
 	if url == "" {
 		url = BaseURL
 	}
-	pl, err := playwright.Run()
-	if err != nil {
-		return "", nil, err
-	}
 
-	browser, err := pl.Firefox.Launch()
-	if err != nil {
-		return "", nil, err
-	}
-	defer browser.Close()
-
-	page, err := browser.NewPage()
+	screen, err := w.HTMLGetter.GetScreenshot(url)
 
 	if err != nil {
-		return "", nil, err
-	}
-	defer page.Close()
-	page.SetDefaultTimeout(800000)
-	_, err = page.Goto(url)
-
-	if err != nil {
-		return "", nil, err
-	}
-
-	time.Sleep(time.Millisecond * 110)
-
-	screen, err := page.Screenshot()
-
-	if err != nil {
-		return "", nil, err
+		return w.Get(url)
 	}
 
 	img, _, _ := image.Decode(bytes.NewReader(screen))
@@ -76,6 +52,5 @@ func (w WarmMap) Get(url string) (string, image.Image, error) {
 	out, _ := os.Create("" + FileName)
 	err = png.Encode(out, croppedImg)
 
-	pl.Stop()
 	return FileName, croppedImg, err
 }

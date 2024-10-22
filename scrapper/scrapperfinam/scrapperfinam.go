@@ -29,9 +29,7 @@ func (s ScrapperFinam) Scrape(
 		for {
 			html, err := s.HTMLGetter.GetHTML(url)
 			if err != nil {
-				log.Println("FinamError", err.Error())
-			}
-			if err != nil {
+				log.Println("Finam HTML err ", err.Error())
 				continue
 			}
 			for _, n := range s.AnalysisHTML(html, url, time.Now().Format("2006-01-02")) {
@@ -48,7 +46,7 @@ func (s ScrapperFinam) AnalysisHTML(html string, u string, timeNow string) []hot
 	html = strings.Replace(html, "\n", "", strings.Count(html, "\n"))
 	html = strings.Replace(html, "\r", "", strings.Count(html, "\r"))
 	strs := regexp.MustCompile(`<a href="([^"]*)" data-chp-url="([^"]*)" class="cl-blue font-l bold"([^<]*)>*</a>`).FindAllStringSubmatch(html, -1)
-	strs1 := regexp.MustCompile(`<p class="font-s cl-black">(.*?)</p>`).FindAllStringSubmatch(html, -1)
+	strs1 := regexp.MustCompile(`<p class="font-s cl-black">(.*?)</p>(.*?)</div>`).FindAllStringSubmatch(html, -1)
 	if strs1 == nil {
 		return answer
 	}
@@ -70,11 +68,19 @@ func (s ScrapperFinam) AnalysisHTML(html string, u string, timeNow string) []hot
 		if timeNow != timeNew {
 			continue
 		}
+		stocks := make([]hotnews.Stock, 0)
+
+		for _, s1 := range regexp.MustCompile("href=\"(.*?)\"").FindAllStringSubmatch(strs1[i][2], -1) {
+			splitted := strings.Split(s1[1], "/")
+			stock := splitted[len(splitted)-2]
+			stocks = append(stocks, hotnews.Stock{Stock: stock, URL: parsed.Scheme + "://" + parsed.Host + s1[1]})
+		}
 
 		answer = append(answer, hotnews.WebNews{
 			From:     hotnews.Finam,
 			Title:    FixTitle(str1[1]),
 			SubTitle: FixTitle(strs1[i][1]),
+			Stocks:   stocks,
 			URL:      parsed.Scheme + "://" + parsed.Host + str[1],
 			Time:     timeNew})
 	}

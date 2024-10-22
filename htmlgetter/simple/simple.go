@@ -18,3 +18,7 @@ func (s Simple) GetHTML(url string) (string, error) {
 	bytes, _ := io.ReadAll(r.Body)
 	return string(bytes), nil
 }
+
+func (s Simple) GetScreenshot(url string) ([]byte, error) {
+	return []byte{}, nil
+}

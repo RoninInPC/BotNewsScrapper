@@ -16,6 +16,7 @@ type TelegramSenderImage struct {
 	Cron             *cron.Cron
 	MakeImageFromWeb makeimagefromweb.MakeImageFromWeb
 	CronSetup        string
+	Emoji            string
 	Caption          string
 }
 
@@ -32,7 +33,8 @@ func (t TelegramSenderImage) Work() {
 				reader := tgbotapi.FileReader{Name: GetMD5Hash(name + time.Now().String()), Reader: file}
 				for _, id := range t.Telegram.TelegramChannels.GetChatsId() {
 					photo := tgbotapi.NewPhoto(id, reader)
-					photo.Caption = t.Caption
+					photo.Caption = t.Emoji + "*" + t.Caption + "*"
+					photo.ParseMode = tgbotapi.ModeMarkdown
 					t.Telegram.BotApi.Send(photo)
 				}
 			}
