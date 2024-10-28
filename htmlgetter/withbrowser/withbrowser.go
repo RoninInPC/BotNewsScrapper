@@ -31,14 +31,7 @@ func Init() WithBrowser {
 }
 
 func (h WithBrowser) ReInstall() {
-	if isInstalled.Load() == true {
-		isInstalled.Store(false)
-		ans, _ := exec.Command("npx", "playwright", "uninstall").Output()
-		log.Println(ans)
-		ans, _ = exec.Command("npx", "playwright", "install", "--with-deps").Output()
-		log.Println(ans)
-		isInstalled.Store(true)
-	}
+	ReInstall()
 }
 
 func (h WithBrowser) GetHTML(url string) (string, error) {
@@ -111,4 +104,15 @@ func (h WithBrowser) GetScreenshot(url string) ([]byte, error) {
 	screen, err := page.Screenshot()
 	pl.Stop()
 	return screen, err
+}
+
+func ReInstall() {
+	if isInstalled.Load() == true {
+		isInstalled.Store(false)
+		ans, _ := exec.Command("npx", "playwright", "uninstall").Output()
+		log.Println(string(ans))
+		ans, _ = exec.Command("npx", "playwright", "install", "--with-deps").Output()
+		log.Println(string(ans))
+		isInstalled.Store(true)
+	}
 }
