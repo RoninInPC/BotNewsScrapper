@@ -86,7 +86,7 @@ func (h WithBrowser) GetScreenshot(url string) ([]byte, error) {
 		return nil, err
 	}
 
-	browser, err := pl.Firefox.Launch()
+	browser, err := pl.Chromium.Launch()
 	if err != nil {
 		h.ReInstall()
 		return nil, err

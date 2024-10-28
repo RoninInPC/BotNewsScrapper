@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	tbbot := bot.InitBot("config.ini")
+	tbbot := bot.InitBot("/etc/project/config.ini")
 
 	tbbot.Commands = append(tbbot.Commands, bot.Command{
 		"help",

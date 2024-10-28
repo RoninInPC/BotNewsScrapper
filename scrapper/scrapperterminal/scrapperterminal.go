@@ -26,6 +26,7 @@ func (s ScrapperTerminal) Scrape(channel chan<- hotnews.WebNews, url string, dur
 			body, err := s.HTMLGetter.GetHTML(url)
 			if err != nil {
 				log.Println("Terminal GetHTML err ", err.Error())
+				time.Sleep(duration)
 				continue
 			}
 			for _, n := range s.AnalysisHTML(body, url, time.Now().Format("2006-01-02")) {
@@ -41,7 +42,7 @@ func (s ScrapperTerminal) AnalysisHTML(html string, url string, timeNow string) 
 	html = fix(html)
 	strs := regexp.MustCompile("<div class=\"align-self-center news-date-badge\">(.*?)<a href=\"(.*?)\">").FindAllStringSubmatch(html, -1)
 	for _, str := range strs {
-		url2 := url + str[2] + "?hl=ru"
+		url2 := "https://blackterminal.com" + str[2] + "?hl=ru"
 		html2, err := s.HTMLGetter.GetHTML(url2)
 		if err != nil {
 			continue

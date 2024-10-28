@@ -30,6 +30,7 @@ func (s ScrapperFinam) Scrape(
 			html, err := s.HTMLGetter.GetHTML(url)
 			if err != nil {
 				log.Println("Finam HTML err ", err.Error())
+				time.Sleep(duration)
 				continue
 			}
 			for _, n := range s.AnalysisHTML(html, url, time.Now().Format("2006-01-02")) {
