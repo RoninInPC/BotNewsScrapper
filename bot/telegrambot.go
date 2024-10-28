@@ -9,7 +9,6 @@ import (
 	"BotNewsScrapper/newsstorage"
 	"BotNewsScrapper/newsstorage/redisstorage"
 	"BotNewsScrapper/scrapper"
-	"BotNewsScrapper/scrapper/scrapperfinam"
 	"BotNewsScrapper/scrapper/scrapperterminal"
 	"BotNewsScrapper/sender"
 	"github.com/and3rson/telemux/v2"
@@ -50,7 +49,7 @@ func InitBot(fileConfig string) TelegramBot {
 
 	tb.Scrappers = []scrapper.Scrapper[hotnews.WebNews]{
 		//scrapperbks.ScrapperBKS{HTMLGetter: withbrowser.Init()},
-		scrapperfinam.ScrapperFinam{HTMLGetter: withbrowser.Init()},
+		//scrapperfinam.ScrapperFinam{HTMLGetter: withbrowser.Init()},
 		//scrappertbank.ScrapperTBank{HTMLGetter: simple.Simple{}},
 		scrapperterminal.ScrapperTerminal{HTMLGetter: withbrowser.Init()},
 	}
