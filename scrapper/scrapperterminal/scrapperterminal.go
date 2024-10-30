@@ -55,7 +55,17 @@ func (s ScrapperTerminal) AnalysisHTML(html string, url string, timeNow string) 
 		title := regexp.MustCompile("<div class=\"news-header\" itemprop=\"headline\">(.*?)<strong>(.*?)</strong>").FindAllStringSubmatch(html2, -1)
 		subtitle := regexp.MustCompile("style=\"max-width: 700px; display: block; width: 100%;\" class=\"mb-2\"/>(.*?)</article>").FindAllStringSubmatch(html2, -1)
 		stock := regexp.MustCompile("<div class=\"ticker grey d-none d-sm-block\"> (.*?) </div>").FindAllStringSubmatch(html2, -1)
-
+		if stock == nil {
+			answer = append(answer, hotnews.WebNews{
+				From:     hotnews.Terminal,
+				URL:      url2,
+				Title:    title[0][2],
+				SubTitle: fix(subtitle[0][1]),
+				Stocks:   []hotnews.Stock{},
+				Time:     timeNow,
+			})
+			continue
+		}
 		answer = append(answer, hotnews.WebNews{
 			From:     hotnews.Terminal,
 			URL:      url2,

@@ -11,22 +11,14 @@ type WithBrowser struct {
 }
 
 var (
-	isInstalled *atomic.Bool = nil
+	isInstalled atomic.Bool
 )
 
 func Init() WithBrowser {
-	if isInstalled == nil {
-		isInstalled = &atomic.Bool{}
-		isInstalled.Store(false)
-		_ = playwright.Install()
-		isInstalled.Store(true)
-	} else {
-		if !isInstalled.Load() {
-			_ = playwright.Install()
-			isInstalled.Store(true)
-		}
-	}
 	h := WithBrowser{}
+	isInstalled.Store(true)
+	_ = playwright.Install()
+
 	return h
 }
 
