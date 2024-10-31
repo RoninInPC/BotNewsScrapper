@@ -5,6 +5,7 @@ import (
 	"log"
 	"os/exec"
 	"sync/atomic"
+	"time"
 )
 
 type WithBrowser struct {
@@ -92,7 +93,7 @@ func (h WithBrowser) GetScreenshot(url string) ([]byte, error) {
 		h.ReInstall()
 		return nil, err
 	}
-
+	time.Sleep(time.Second * 4)
 	screen, err := page.Screenshot()
 	pl.Stop()
 	return screen, err
