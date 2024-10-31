@@ -118,11 +118,15 @@ func (t *TelegramBot) Work(duration time.Duration) {
 	for _, s := range t.Senders {
 		s.Work()
 	}
-
+	loc, _ := time.LoadLocation("Europe/Moscow")
 	go func() {
 		for {
 			t.NewsStorage.Free()
 			for news := range t.ChannelNews {
+
+				if time.Now().In(loc).Format("15:04:05") >= "20:00:00" {
+					continue
+				}
 				if t.TelegramChannels.Size() == 0 {
 					continue
 				}
