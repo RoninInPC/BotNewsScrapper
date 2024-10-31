@@ -137,8 +137,8 @@ func (t *TelegramBot) Work(duration time.Duration) {
 						subTitle = "\n" + news.SubTitle + "\n\n"
 					}
 					msg := tgbotapi.NewMessage(channelId,
-						"#"+news.From+"\n\n"+
-							news.MakeTags()+
+						//"#"+news.From+"\n\n"+
+						news.MakeTags()+
 							"\n*"+news.Title+"*"+subTitle+
 							"@"+t.BotApi.Self.UserName)
 					msg.ReplyMarkup = news.MakeButtons()
