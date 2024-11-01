@@ -19,7 +19,6 @@ func Init() WithBrowser {
 	h := WithBrowser{}
 	isInstalled.Store(true)
 	_ = playwright.Install()
-
 	return h
 }
 
