@@ -75,7 +75,7 @@ func InitBot(fileConfig string) TelegramBot {
 			Telegram:         &tb,
 			Cron:             cronMoscow,
 			MakeImageFromWeb: warmmap.Init(),
-			CronSetup:        "0 43 10 * * 1-5",
+			CronSetup:        "0 02 11 * * 1-5",
 			Emoji:            "🗺️",
 			Caption:          "Тепловая карта открытия биржи."},
 		TelegramSenderImage{
