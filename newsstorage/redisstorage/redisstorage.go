@@ -24,7 +24,7 @@ func (r RedisStorage[News]) Add(news News) bool {
 	if r.Contains(news) {
 		return false
 	}
-	return r.Client.Append(GetMD5Hash(news.GetNews()), time.Now().String()).Err() == nil
+	return r.Client.Append(news.GetNews(), time.Now().String()).Err() == nil
 }
 
 func (r RedisStorage[News]) Free() {
@@ -42,7 +42,7 @@ func GetMD5Hash(text string) string {
 }
 
 func (r RedisStorage[News]) Contains(news News) bool {
-	return r.Client.Get(GetMD5Hash(news.GetNews())).Err() == nil
+	return r.Client.Get(news.GetNews()).Err() == nil
 }
 
 func (r RedisStorage[News]) GetAllKeys() []string {
