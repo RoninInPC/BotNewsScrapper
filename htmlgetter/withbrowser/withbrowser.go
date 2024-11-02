@@ -35,7 +35,7 @@ func (h WithBrowser) GetHTML(url string) (string, error) {
 		h.ReInstall()
 		return "", err
 	}
-
+	defer pl.Stop()
 	browser, err := pl.Firefox.Launch()
 	if err != nil {
 		h.ReInstall()
@@ -60,7 +60,6 @@ func (h WithBrowser) GetHTML(url string) (string, error) {
 
 	bytes, err := response.Body()
 
-	pl.Stop()
 	return string(bytes), err
 }
 
@@ -70,7 +69,7 @@ func (h WithBrowser) GetScreenshot(url string) ([]byte, error) {
 		h.ReInstall()
 		return nil, err
 	}
-
+	defer pl.Stop()
 	browser, err := pl.Chromium.Launch()
 	if err != nil {
 		h.ReInstall()
@@ -94,7 +93,6 @@ func (h WithBrowser) GetScreenshot(url string) ([]byte, error) {
 	}
 	time.Sleep(time.Second * 4)
 	screen, err := page.Screenshot()
-	pl.Stop()
 	return screen, err
 }
 
@@ -105,6 +103,7 @@ func ReInstall() {
 		log.Println(string(ans))
 		time.Sleep(time.Second * 10)
 		ans, _ = exec.Command("npx", "playwright", "install").Output()
+		ans, _ = exec.Command("npx", "playwright", "install", "--with-deps").Output()
 		log.Println(string(ans))
 		isInstalled.Store(true)
 	}

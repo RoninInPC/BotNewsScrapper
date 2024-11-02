@@ -4,7 +4,7 @@ RUN apt-get -y update
 
 RUN apt-get -y install npm
 
-RUN npx playwright install --with-deps
+RUN npx -y playwright install --with-deps
 
 COPY cacert.pem /etc/ssl/certs/
 
