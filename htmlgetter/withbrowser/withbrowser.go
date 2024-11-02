@@ -101,9 +101,10 @@ func (h WithBrowser) GetScreenshot(url string) ([]byte, error) {
 func ReInstall() {
 	if isInstalled.Load() == true {
 		isInstalled.Store(false)
-		ans, _ := exec.Command("npx", "playwright", "uninstall").Output()
+		ans, _ := exec.Command("npx", "playwright", "uninstall", "---all").Output()
 		log.Println(string(ans))
-		_ = playwright.Install()
+		ans, _ = exec.Command("npx", "playwright", "install", "--with-deps").Output()
+		log.Println(string(ans))
 		isInstalled.Store(true)
 	}
 }
