@@ -6,17 +6,4 @@ services:
       context: .
       dockerfile: Dockerfile
     user: root
-    depends_on:
-      - service-db
     network_mode: "host"
-
-  service-db:
-    image: redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis-data:/data
-    restart: unless-stopped
-
-volumes:
-  redis-data:

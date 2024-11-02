@@ -103,8 +103,7 @@ func ReInstall() {
 		isInstalled.Store(false)
 		ans, _ := exec.Command("npx", "playwright", "uninstall").Output()
 		log.Println(string(ans))
-		ans, _ = exec.Command("npx", "playwright", "install", "--with-deps").Output()
-		log.Println(string(ans))
+		_ = playwright.Install()
 		isInstalled.Store(true)
 	}
 }
