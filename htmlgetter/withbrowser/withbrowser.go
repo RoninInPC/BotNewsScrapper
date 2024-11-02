@@ -104,7 +104,7 @@ func ReInstall() {
 		ans, _ := exec.Command("npx", "playwright", "uninstall", "--all").Output()
 		log.Println(string(ans))
 		time.Sleep(time.Second * 10)
-		ans, _ = exec.Command("npx", "playwright", "install", "--with-deps").Output()
+		ans, _ = exec.Command("npx", "playwright", "install").Output()
 		log.Println(string(ans))
 		isInstalled.Store(true)
 	}
