@@ -2,10 +2,6 @@ FROM ubuntu
 
 RUN apt-get -y update
 
-WORKDIR /usr/app
-
-COPY ./ /usr/app
-
 RUN apt-get -y install npm
 RUN npm install
 RUN npm install -g playwright
