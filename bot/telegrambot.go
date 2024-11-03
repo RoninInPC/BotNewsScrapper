@@ -60,6 +60,10 @@ func InitBot(fileConfig string) TelegramBot {
 	db, _ = secRedisChannelStorage.Key("db").Int()
 	tb.TelegramChannels = redischannels.Init(secRedisChannelStorage.Key("addr").String(),
 		secRedisChannelStorage.Key("password").String(), db)
+	id, err := secRedisChannelStorage.Key("base").Int64()
+	if err != nil {
+		tb.TelegramChannels.Add(id)
+	}
 
 	b, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
@@ -69,6 +73,10 @@ func InitBot(fileConfig string) TelegramBot {
 
 	loc, _ := time.LoadLocation("Europe/Moscow")
 	cronMoscow := cron.NewWithLocation(loc)
+
+	cronMoscow.AddFunc("0 0 0 * * 1", func() {
+		tb.NewsStorage.Free()
+	})
 
 	tb.Senders = []sender.Sender{
 		TelegramSenderImage{
@@ -121,7 +129,6 @@ func (t *TelegramBot) Work(duration time.Duration) {
 	loc, _ := time.LoadLocation("Europe/Moscow")
 	go func() {
 		for {
-			t.NewsStorage.Free()
 			for news := range t.ChannelNews {
 
 				if time.Now().In(loc).Format("15:04:05") >= "20:00:00" && time.Now().In(loc).Format("15:04:05") <= "06:00:00" {

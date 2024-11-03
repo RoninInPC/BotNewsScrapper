@@ -18,7 +18,7 @@ func main() {
 		},
 		&bot.SimpleActionStruct{
 			func(telegramBot bot.TelegramBot, u *telemux.Update) {
-				telegramBot.BotApi.Send(tgbotapi.NewMessage(u.FromChat().ID, "Здравствуйте, я новостной бот, я беру новости с https://www.finam.ru/publications/section/market/"))
+				telegramBot.BotApi.Send(tgbotapi.NewMessage(u.FromChat().ID, "Здравствуйте, я новостной бот, я беру новости с https://blackterminal.com/news?hl=ru"))
 			},
 			tbbot}})
 	tbbot.Commands = append(tbbot.Commands, bot.Command{

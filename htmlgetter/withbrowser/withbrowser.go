@@ -37,6 +37,7 @@ func (h WithBrowser) GetHTML(url string) (string, error) {
 	defer pl.Stop()
 	browser, err := pl.Firefox.Launch()
 	if err != nil {
+		pl.Stop()
 		h.ReInstall()
 		return "", err
 	}
@@ -45,6 +46,8 @@ func (h WithBrowser) GetHTML(url string) (string, error) {
 	page, err := browser.NewPage()
 
 	if err != nil {
+		browser.Close()
+		pl.Stop()
 		h.ReInstall()
 		return "", err
 	}
@@ -53,6 +56,9 @@ func (h WithBrowser) GetHTML(url string) (string, error) {
 	page.SetDefaultTimeout(800000)
 	response, err := page.Goto(url)
 	if err != nil {
+		page.Close()
+		browser.Close()
+		pl.Stop()
 		h.ReInstall()
 		return "", err
 	}
@@ -71,6 +77,7 @@ func (h WithBrowser) GetScreenshot(url string) ([]byte, error) {
 	defer pl.Stop()
 	browser, err := pl.Chromium.Launch()
 	if err != nil {
+		pl.Stop()
 		h.ReInstall()
 		return nil, err
 	}
@@ -79,6 +86,8 @@ func (h WithBrowser) GetScreenshot(url string) ([]byte, error) {
 	page, err := browser.NewPage()
 
 	if err != nil {
+		browser.Close()
+		pl.Stop()
 		h.ReInstall()
 		return nil, err
 	}
@@ -87,6 +96,9 @@ func (h WithBrowser) GetScreenshot(url string) ([]byte, error) {
 	_, err = page.Goto(url)
 
 	if err != nil {
+		page.Close()
+		browser.Close()
+		pl.Stop()
 		h.ReInstall()
 		return nil, err
 	}
