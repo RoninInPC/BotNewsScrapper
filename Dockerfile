@@ -3,7 +3,6 @@ FROM ubuntu
 RUN apt-get -y update
 
 RUN apt-get -y install npm
-RUN npm install
 RUN npm install -g playwright
 RUN npx -y playwright install --with-deps
 
