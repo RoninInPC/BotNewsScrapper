@@ -32,13 +32,11 @@ func (h WithBrowser) GetHTML(url string) (string, error) {
 	}
 	pl, err := playwright.Run()
 	if err != nil {
-		h.ReInstall()
 		return "", err
 	}
 	defer pl.Stop()
 	browser, err := pl.Firefox.Launch()
 	if err != nil {
-		h.ReInstall()
 		return "", err
 	}
 
@@ -46,7 +44,6 @@ func (h WithBrowser) GetHTML(url string) (string, error) {
 	page, err := browser.NewPage()
 
 	if err != nil {
-		h.ReInstall()
 		return "", err
 	}
 	defer page.Close()
@@ -54,7 +51,6 @@ func (h WithBrowser) GetHTML(url string) (string, error) {
 	page.SetDefaultTimeout(800000)
 	response, err := page.Goto(url)
 	if err != nil {
-		h.ReInstall()
 		return "", err
 	}
 
@@ -66,13 +62,11 @@ func (h WithBrowser) GetHTML(url string) (string, error) {
 func (h WithBrowser) GetScreenshot(url string) ([]byte, error) {
 	pl, err := playwright.Run()
 	if err != nil {
-		h.ReInstall()
 		return nil, err
 	}
 	defer pl.Stop()
 	browser, err := pl.Chromium.Launch()
 	if err != nil {
-		h.ReInstall()
 		return nil, err
 	}
 	defer browser.Close()
@@ -80,7 +74,6 @@ func (h WithBrowser) GetScreenshot(url string) ([]byte, error) {
 	page, err := browser.NewPage()
 
 	if err != nil {
-		h.ReInstall()
 		return nil, err
 	}
 	defer page.Close()
@@ -88,7 +81,6 @@ func (h WithBrowser) GetScreenshot(url string) ([]byte, error) {
 	_, err = page.Goto(url)
 
 	if err != nil {
-		h.ReInstall()
 		return nil, err
 	}
 	time.Sleep(time.Second * 4)
@@ -102,7 +94,6 @@ func ReInstall() {
 		ans, _ := exec.Command("npx", "playwright", "uninstall", "--all").Output()
 		log.Println(string(ans))
 		time.Sleep(time.Second * 10)
-		ans, _ = exec.Command("npx", "playwright", "install").Output()
 		ans, _ = exec.Command("npx", "playwright", "install", "--with-deps").Output()
 		log.Println(string(ans))
 		isInstalled.Store(true)

@@ -124,7 +124,7 @@ func (t *TelegramBot) Work(duration time.Duration) {
 			t.NewsStorage.Free()
 			for news := range t.ChannelNews {
 
-				if time.Now().In(loc).Format("15:04:05") >= "20:00:00" {
+				if time.Now().In(loc).Format("15:04:05") >= "20:00:00" && time.Now().In(loc).Format("15:04:05") <= "06:00:00" {
 					continue
 				}
 				if t.TelegramChannels.Size() == 0 {
