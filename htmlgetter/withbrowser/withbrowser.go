@@ -2,6 +2,7 @@ package withbrowser
 
 import (
 	"github.com/playwright-community/playwright-go"
+	"log"
 	"sync/atomic"
 	"time"
 )
@@ -97,12 +98,18 @@ func (h WithBrowser) GetScreenshot(url string) ([]byte, error) {
 func ReInstall() {
 	if isInstalled.Load() == true {
 		isInstalled.Store(false)
+		driver, _ := playwright.NewDriver()
+		err := driver.Uninstall()
+		if err != nil {
+			log.Println("Uninstall error", err.Error())
+		}
 		//ans, _ := exec.Command("npx", "playwright", "uninstall", "--all").Output()
 		//log.Println(string(ans))
 		//time.Sleep(time.Second * 10)
 		//ans, _ = exec.Command("npx", "playwright", "install").Output()
 		//ans, _ = exec.Command("npx", "playwright", "install", "--with-deps").Output()
 		//log.Println(string(ans))
+		playwright.Install()
 		isInstalled.Store(true)
 	}
 }
