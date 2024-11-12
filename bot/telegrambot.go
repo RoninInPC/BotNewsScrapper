@@ -11,6 +11,7 @@ import (
 	"BotNewsScrapper/scrapper"
 	"BotNewsScrapper/scrapper/scrapperterminal"
 	"BotNewsScrapper/sender"
+	"BotNewsScrapper/sticker"
 	"github.com/and3rson/telemux/v2"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/robfig/cron"
@@ -150,7 +151,8 @@ func (t *TelegramBot) Work(duration time.Duration) {
 					msg := tgbotapi.NewMessage(channelId,
 						//"#"+news.From+"\n\n"+
 						news.MakeTags()+
-							"\n*"+news.Title+"*"+subTitle+
+							"\n"+sticker.GetStickerByText(news.Title)+
+							"*"+news.Title+"*"+subTitle+
 							"@"+t.BotApi.Self.UserName)
 					msg.ReplyMarkup = news.MakeButtons()
 					msg.ParseMode = tgbotapi.ModeMarkdown
